@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Midnight Alert</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050208;--bg2:#12071a;--card:#140b1d;--line:#3d2214;--tx:#f5e9dc;--mut:#b09bbd;--or:#ff7a1a;--red:#e01b1b;--pur:#8a4dff;--gr:#47e08a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.fog{position:fixed;left:0;right:0;bottom:60px;height:190px;pointer-events:none;background:radial-gradient(ellipse at 30% 100%,rgba(138,77,255,.22),transparent 60%),radial-gradient(ellipse at 75% 100%,rgba(255,122,26,.15),transparent 60%);animation:drift 9s ease-in-out infinite alternate;z-index:1}
+@keyframes drift{to{transform:translateX(30px);opacity:.55}}
+.web{position:fixed;top:0;font-size:78px;opacity:.4;pointer-events:none;z-index:1;line-height:1}
+.tl{left:0}.tr{right:0;transform:scaleX(-1)}
+.ghost{position:fixed;font-size:34px;opacity:.28;pointer-events:none;animation:float 6s ease-in-out infinite;z-index:1}
+.g1{left:4%;top:42%}.g2{right:4%;top:65%;animation-delay:2s}
+@keyframes float{50%{transform:translateY(-18px)}}
+@keyframes flick{0%,18%,22%,62%,64%,100%{opacity:1}20%,63%{opacity:.5}}
+canvas{width:100%;max-width:520px;height:auto;display:block;margin:0 auto 14px;border-radius:50%;border:2px solid var(--or);box-shadow:0 0 30px rgba(255,90,0,.35)}
+.wrap{position:relative;z-index:2}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:radial-gradient(circle at 50% -15%,rgba(255,122,26,.22),transparent 45%),radial-gradient(circle at 50% 110%,rgba(138,77,255,.18),transparent 50%),var(--bg) fixed;color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 96px}
+header{text-align:center;padding:18px 0 8px;position:relative}
+.moon{font-size:54px;filter:drop-shadow(0 0 22px #ff9a3c) drop-shadow(0 0 40px rgba(255,90,0,.5))}
+h1{font-family:'Creepster','Impact',cursive;font-weight:400;letter-spacing:2px;font-size:clamp(34px,8vw,52px);margin:2px 0;color:var(--or);text-shadow:0 0 6px #ff4d00,0 0 24px rgba(255,90,0,.75),0 3px 0 #5a1500;animation:flick 5s infinite}
+.sub{color:var(--mut);font-size:14px;margin:0}
+.bat{position:absolute;font-size:22px;animation:fly 7s linear infinite;top:20px;left:-30px;opacity:.8}
+.bat:nth-child(2){top:60px;animation-delay:3s;font-size:16px}
+@keyframes fly{to{transform:translateX(110vw) translateY(-14px)}}
+.card{background:linear-gradient(160deg,#1a0e26,var(--card));border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:14px;box-shadow:0 0 20px rgba(255,100,0,.1),inset 0 0 30px rgba(0,0,0,.5)}
+h2{font-size:17px;margin:0 0 10px;color:var(--pur)}
+.sos-zone{text-align:center;padding:26px 10px}
+.sos{width:210px;height:210px;border-radius:50%;border:6px solid #ffb46b;background:radial-gradient(circle at 35% 30%,#ff6a1f,#b30000 72%);color:#fff;font-size:54px;font-family:'Creepster','Impact',cursive;letter-spacing:3px;cursor:pointer;animation:pulse 2s infinite;box-shadow:0 0 40px rgba(255,59,59,.6)}
+.sos small{display:block;font-family:system-ui,sans-serif;font-size:13px;letter-spacing:0;margin-top:4px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,59,59,.7)}70%{box-shadow:0 0 0 38px rgba(255,59,59,0)}100%{box-shadow:0 0 0 0 rgba(255,59,59,0)}}
+.hint{color:var(--mut);font-size:13px;margin-top:14px}
+.status{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.pill{font-size:12px;padding:5px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mut)}
+.pill.ok{color:var(--gr);border-color:var(--gr)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;cursor:pointer;background:var(--pur);color:#fff;text-decoration:none}
+.btn.or{background:var(--or);color:#2a1100}.btn.gh{background:transparent;border:1px solid var(--line);color:var(--tx)}.btn.rd{background:var(--red)}.btn.gn{background:var(--gr);color:#06240f}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.contact{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.contact:last-child{border:0}
+.cn{font-weight:700}.cm{color:var(--mut);font-size:13px}
+.tag{font-size:11px;background:var(--bg2);border:1px solid var(--line);padding:2px 8px;border-radius:99px;margin-left:6px;color:var(--or)}
+input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--tx);font-size:15px;margin-bottom:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hist{padding:12px;border-left:3px solid var(--or);background:var(--bg2);border-radius:8px;margin-bottom:10px}
+.hist .t{font-weight:700}.hist a{color:var(--or)}
+.empty{color:var(--mut);text-align:center;padding:20px}
+nav{position:fixed;z-index:10;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:6px;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg2);border-top:1px solid var(--line)}
+nav button{flex:1;max-width:200px;background:transparent;border:0;color:var(--mut);font-size:13px;padding:8px;border-radius:10px;cursor:pointer}
+nav button.on{background:var(--card);color:var(--or);font-weight:700}
+nav span{display:block;font-size:20px}
+.view{display:none}.view.on{display:block}
+.ov{position:fixed;inset:0;background:rgba(10,4,18,.94);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:20;text-align:center;padding:20px}
+.ov.on{display:flex}
+.big{font-family:'Creepster','Impact',cursive;font-size:130px;color:var(--red);line-height:1;text-shadow:0 0 30px var(--red)}
+.msg{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:13px;color:var(--mut);text-align:left;white-space:pre-wrap;word-break:break-word;margin:10px 0}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--gr);color:#06240f;padding:10px 16px;border-radius:99px;font-weight:700;display:none;z-index:30}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="bat">🦇</div><div class="bat">🦇</div>
+<div class="moon">🌕</div>
+<h1>The Midnight Alert</h1>
+<p class="sub">🕷️ Andhera ho ya darr — help ek tap door hai 🎃 🕷️</p></header>
+
+<section class="view on" id="v-sos">
+<div class="card sos-zone">
+<button class="sos" id="sosBtn" aria-label="Send SOS">SOS<small>Tap to alert</small></button>
+<p class="hint">5-second countdown milega, cancel kar sakte ho. Location + alert aapke trusted contacts ko jayega.</p>
+<div class="status"><span class="pill" id="pLoc">📍 Location: checking…</span><span class="pill" id="pNet">📶 Online</span><span class="pill" id="pCon"></span></div>
+</div>
+<div class="card"><h2>⚡ Quick call</h2>
+<div class="row"><a class="btn rd" href="tel:112">📞 112 Emergency</a><a class="btn or" href="tel:1091">👩 1091 Women</a><a class="btn gh" href="tel:108">🚑 108 Ambulance</a><button class="btn gh" id="tsr">🔊 Test siren</button></div></div>
+</section>
+
+<section class="view" id="v-contacts">
+<div class="card"><h2>👻 Emergency directory</h2><div id="clist"></div></div>
+<div class="card"><h2>➕ Add trusted contact</h2>
+<input id="cName" placeholder="Name (e.g. Roommate Rahul)">
+<div class="grid2"><input id="cPhone" type="tel" placeholder="Phone number"><input id="cRel" placeholder="Relation / role"></div>
+<button class="btn or" id="addC">Add contact</button></div>
+</section>
+
+<section class="view" id="v-map">
+<div class="card"><h2>🗺️ Live haunted radar</h2>
+<canvas id="radar" width="640" height="640"></canvas>
+<div class="status"><span class="pill" id="mLat">Lat: —</span><span class="pill" id="mLng">Lng: —</span><span class="pill" id="mAcc">±— m</span></div>
+<div class="row" style="justify-content:center;margin-top:12px"><button class="btn or" id="mTrk">▶ Start tracking</button><button class="btn gh" id="mOpen">🗺 Open in Google Maps</button></div>
+</div></section>
+
+<section class="view" id="v-hist">
+<div class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">📜 Alert history</h2><button class="btn gh" id="clrH">Clear</button></div><div id="hlist" style="margin-top:12px"></div></div>
+</section>
+</div>
+
+<div class="fog"></div><div class="web tl">🕸️</div><div class="web tr">🕸️</div><div class="ghost g1">👻</div><div class="ghost g2">👻</div>
+<nav><button class="on" data-v="sos"><span>🎃</span>SOS</button><button data-v="contacts"><span>☎️</span>Contacts</button><button data-v="map"><span>🗺️</span>Map</button><button data-v="hist"><span>📜</span>History</button></nav>
+
+<div class="ov" id="cd"><div style="color:var(--mut)">Sending alert in…</div><div class="big" id="cdn">5</div><br><button class="btn gh" id="cdx">✋ Cancel</button></div>
+<div class="ov" id="res"><div style="max-width:440px;width:100%"><h2 style="font-size:22px">🚨 Alert ready!</h2><div class="msg" id="rmsg"></div><div class="row" style="justify-content:center" id="ract"></div><br><button class="btn gh" id="rcl">Close</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+var $=function(i){return document.getElementById(i)};
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var DEF=[
+{id:'d1',name:'National Emergency',phone:'112',rel:'Police / Fire / Medical',def:1},
+{id:'d2',name:'Women Helpline',phone:'1091',rel:'24x7 support',def:1},
+{id:'d3',name:'Ambulance',phone:'108',rel:'Medical emergency',def:1},
+{id:'d4',name:'Campus Security',phone:'0000000000',rel:'Edit number in code / add yours',def:1}];
+var contacts=load('ma_contacts',DEF), hist=load('ma_hist',[]), loc=null, timer=null;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function toast(t){var e=$('toast');e.textContent=t;e.style.display='block';setTimeout(function(){e.style.display='none'},2200)}
+
+/* nav */
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){
+document.querySelectorAll('nav button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on')});$('v-'+b.dataset.v).classList.add('on');}});
+
+/* contacts */
+function renderC(){
+$('clist').innerHTML=contacts.map(function(c){return '<div class="contact"><div><div class="cn">'+esc(c.name)+(c.def?'':'<span class="tag">trusted</span>')+'</div><div class="cm">'+esc(c.phone)+' · '+esc(c.rel||'')+'</div></div><div class="row"><a class="btn gn" href="tel:'+esc(c.phone)+'">📞</a>'+(c.def?'':'<button class="btn gh" data-del="'+c.id+'">🗑</button>')+'</div></div>'}).join('');
+var n=contacts.filter(function(c){return !c.def}).length;
+$('pCon').textContent='👥 Trusted: '+n;$('pCon').className='pill'+(n?' ok':'');
+document.querySelectorAll('[data-del]').forEach(function(b){b.onclick=function(){contacts=contacts.filter(function(c){return c.id!==b.dataset.del});save('ma_contacts',contacts);renderC()}});}
+$('addC').onclick=function(){var n=$('cName').value.trim(),p=$('cPhone').value.trim();
+if(!n||!/^[+\d][\d\s-]{2,}$/.test(p)){toast('Valid name aur number daalo');return}
+contacts.push({id:'c'+Date.now(),name:n,phone:p,rel:$('cRel').value.trim()});save('ma_contacts',contacts);
+$('cName').value=$('cPhone').value=$('cRel').value='';renderC();toast('Contact added ✔')};
+
+/* history */
+function renderH(){
+$('hlist').innerHTML=hist.length?hist.map(function(h){return '<div class="hist"><div class="t">🚨 '+esc(h.time)+'</div><div class="cm">'+(h.link?'<a href="'+esc(h.link)+'" target="_blank" rel="noopener">📍 View location</a>':'📍 Location unavailable')+' · Status: '+esc(h.status)+'</div></div>'}).join(''):'<div class="empty">🕸️ Koi alert nahi — sab shaant hai.</div>'}
+$('clrH').onclick=function(){hist=[];save('ma_hist',hist);renderH()};
+
+/* location */
+function getLoc(cb){
+if(!navigator.geolocation){$('pLoc').textContent='📍 Not supported';return cb(null)}
+navigator.geolocation.getCurrentPosition(function(p){loc={lat:p.coords.latitude,lng:p.coords.longitude,acc:Math.round(p.coords.accuracy)};
+$('pLoc').textContent='📍 Location ready';$('pLoc').className='pill ok';cb(loc)},
+function(e){$('pLoc').textContent='📍 Blocked — tap to retry';$('pLoc').className='pill';$('pLoc').style.cursor='pointer';toast(e&&e.code===1?'Permission denied: browser mein Location Allow karo':'Location nahi mili, retry karo');cb(null)},{enableHighAccuracy:false,timeout:15000,maximumAge:30000})}
+
+/* SOS flow */
+$('sosBtn').onclick=function(){initAudio();var s=5;$('cdn').textContent=s;$('cd').classList.add('on');getLoc(function(){});
+timer=setInterval(function(){s--;$('cdn').textContent=s;if(s<=0){clearInterval(timer);$('cd').classList.remove('on');fire()}},1000)};
+$('cdx').onclick=function(){clearInterval(timer);$('cd').classList.remove('on');toast('Alert cancelled')};
+
+function fire(){
+getLoc(function(l){
+var link=l?'https://www.google.com/maps?q='+l.lat+','+l.lng:'';
+var time=new Date().toLocaleString();
+var msg='🚨 EMERGENCY! I need help.\nTime: '+time+'\n'+(l?'My location: '+link+' (±'+l.acc+'m)':'Location unavailable — please call me.');
+hist.unshift({time:time,link:link,status:'Alert prepared'});save('ma_hist',hist);renderH();
+var phones=contacts.filter(function(c){return !c.def}).map(function(c){return c.phone.replace(/[^\d+]/g,'')});
+var a='<a class="btn gn" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(msg)+'">💬 WhatsApp</a>';
+a+='<a class="btn or" href="sms:'+phones.join(',')+'?body='+encodeURIComponent(msg)+'">✉️ SMS trusted</a>';
+a+='<button class="btn rd" id="stp">🔇 Stop siren</button><a class="btn rd" href="tel:112">📞 Call 112</a><button class="btn" id="shr">↗ Share</button><button class="btn gh" id="cpy">📋 Copy</button>';
+$('rmsg').textContent=msg;$('ract').innerHTML=a;$('res').classList.add('on');alertUntil=Date.now()+20000;startSiren();$('stp').onclick=function(){stopSiren();toast('Siren off')};
+$('cpy').onclick=function(){if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){toast('Copied ✔')})}};
+$('shr').onclick=function(){if(navigator.share){navigator.share({title:'SOS',text:msg}).catch(function(){})}else toast('Share not supported')};
+})}
+$('rcl').onclick=function(){stopSiren();$('res').classList.remove('on')};
+
+/* siren (Web Audio) */
+var ac=null,osc=null,gain=null,sirenT=null;
+function initAudio(){try{if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume()}catch(e){}}
+function startSiren(){initAudio();if(!ac||osc)return;
+osc=ac.createOscillator();gain=ac.createGain();osc.type='sawtooth';gain.gain.value=0.25;osc.connect(gain);gain.connect(ac.destination);
+var f=600,up=true;osc.frequency.value=f;osc.start();
+sirenT=setInterval(function(){f+=up?25:-25;if(f>=1300)up=false;if(f<=600)up=true;osc.frequency.setTargetAtTime(f,ac.currentTime,0.02)},30);
+try{if(navigator.vibrate)navigator.vibrate([400,200,400,200,400])}catch(e){}}
+function stopSiren(){clearInterval(sirenT);try{if(osc){osc.stop();osc.disconnect()}}catch(e){}osc=null;$('tsr').textContent='🔊 Test siren'}
+$('tsr').onclick=function(){if(osc){stopSiren()}else{startSiren();this.textContent='🔇 Stop siren'}};
+
+/* radar map */
+var rc=$('radar'),rx=rc.getContext('2d'),W=rc.width,C=W/2,track=[],watchId=null,alertUntil=0;
+function mDist(a,b){return{x:(b.lng-a.lng)*111320*Math.cos(a.lat*Math.PI/180),y:(b.lat-a.lat)*110540}}
+function startTrack(){
+if(!navigator.geolocation){toast('GPS not supported');return}
+watchId=navigator.geolocation.watchPosition(function(p){
+var c={lat:p.coords.latitude,lng:p.coords.longitude,acc:Math.round(p.coords.accuracy)};
+loc=c;track.push(c);if(track.length>120)track.shift();
+$('mLat').textContent='Lat: '+c.lat.toFixed(5);$('mLng').textContent='Lng: '+c.lng.toFixed(5);$('mAcc').textContent='±'+c.acc+' m';
+$('pLoc').textContent='📍 Location ready';$('pLoc').className='pill ok'},
+function(){toast('Location blocked')},{enableHighAccuracy:true,maximumAge:5000});
+$('mTrk').textContent='⏹ Stop tracking'}
+function stopTrack(){if(watchId!==null)navigator.geolocation.clearWatch(watchId);watchId=null;$('mTrk').textContent='▶ Start tracking'}
+$('mTrk').onclick=function(){if(watchId===null)startTrack();else stopTrack()};
+$('mOpen').onclick=function(){if(!loc){toast('Location abhi nahi mili');return}window.open('https://www.google.com/maps?q='+loc.lat+','+loc.lng,'_blank','noopener')};
+document.querySelector('[data-v="map"]').addEventListener('click',function(){if(watchId===null)startTrack()});
+function drawRadar(ts){
+requestAnimationFrame(drawRadar);
+if(!$('v-map').classList.contains('on'))return;
+var alertOn=Date.now()<alertUntil,i;
+var g=rx.createRadialGradient(C,C,10,C,C,C);g.addColorStop(0,'#1a0a2a');g.addColorStop(1,'#050208');
+rx.fillStyle=g;rx.fillRect(0,0,W,W);
+var cur=loc,maxd=0;
+if(cur){track.forEach(function(p){var d=mDist(cur,p);maxd=Math.max(maxd,Math.hypot(d.x,d.y))});maxd=Math.max(maxd,cur.acc||0)}
+var steps=[50,100,200,500,1000,2000,5000,10000],R=steps[steps.length-1];
+for(i=0;i<steps.length;i++){if(steps[i]>=maxd*1.2){R=steps[i];break}}
+var sc=(C-26)/R;
+rx.lineWidth=1;rx.strokeStyle='rgba(255,122,26,.28)';rx.fillStyle='rgba(255,170,90,.75)';rx.font='11px system-ui';rx.textAlign='left';
+for(i=1;i<=4;i++){var r=(C-26)*i/4;rx.beginPath();rx.arc(C,C,r,0,6.2832);rx.stroke();rx.fillText(Math.round(R*i/4)+'m',C+4,C-r+12)}
+rx.beginPath();rx.moveTo(C,12);rx.lineTo(C,W-12);rx.moveTo(12,C);rx.lineTo(W-12,C);rx.stroke();
+rx.textAlign='center';rx.font='bold 14px system-ui';rx.fillStyle='#ff7a1a';rx.fillText('N',C,24);rx.fillText('S',C,W-12);rx.fillText('E',W-14,C+5);rx.fillText('W',14,C+5);
+var a=(ts/2500)*6.2832;
+if(rx.createConicGradient){var cg=rx.createConicGradient(a,C,C);cg.addColorStop(0,'rgba(255,122,26,0)');cg.addColorStop(.8,'rgba(255,122,26,0)');cg.addColorStop(1,'rgba(255,122,26,.45)');rx.fillStyle=cg;rx.beginPath();rx.arc(C,C,C-14,0,6.2832);rx.fill()}
+rx.strokeStyle='#ff9a3c';rx.lineWidth=2;rx.beginPath();rx.moveTo(C,C);rx.lineTo(C+Math.cos(a)*(C-14),C+Math.sin(a)*(C-14));rx.stroke();
+if(!cur){rx.fillStyle='#f5e9dc';rx.font='18px system-ui';rx.textAlign='center';rx.fillText('👻 Waiting for GPS signal…',C,C+8);return}
+if(track.length>1){rx.lineWidth=2.5;for(i=1;i<track.length;i++){var p0=mDist(cur,track[i-1]),p1=mDist(cur,track[i]);rx.strokeStyle='rgba(138,77,255,'+(0.2+0.8*i/track.length)+')';rx.beginPath();rx.moveTo(C+p0.x*sc,C-p0.y*sc);rx.lineTo(C+p1.x*sc,C-p1.y*sc);rx.stroke()}}
+rx.fillStyle='rgba(224,27,27,.14)';rx.strokeStyle='rgba(255,70,70,.7)';rx.setLineDash([5,5]);rx.lineWidth=1.5;rx.beginPath();rx.arc(C,C,Math.max(10,(cur.acc||0)*sc),0,6.2832);rx.fill();rx.stroke();rx.setLineDash([]);
+var per=alertOn?700:1900;
+for(i=0;i<3;i++){var ph=((ts/per)+i/3)%1;rx.strokeStyle='rgba(255,'+(alertOn?40:90)+',40,'+((1-ph)*.7)+')';rx.lineWidth=2.5;rx.beginPath();rx.arc(C,C,ph*(C-20),0,6.2832);rx.stroke()}
+rx.shadowColor=alertOn?'#ff0000':'#ff7a1a';rx.shadowBlur=22;rx.font='34px serif';rx.textAlign='center';rx.fillStyle='#fff';rx.fillText(alertOn?'💀':'🎃',C,C+12);rx.shadowBlur=0;
+if(alertOn){rx.fillStyle='#ff4040';rx.font='bold 16px system-ui';rx.fillText('🚨 SOS ACTIVE',C,W-36)}
+rx.fillStyle='rgba(255,170,90,.75)';rx.font='12px system-ui';rx.fillText('Range: '+R+' m',C,W-52)}
+requestAnimationFrame(drawRadar);
+
+window.addEventListener('online',function(){$('pNet').textContent='📶 Online'});
+window.addEventListener('offline',function(){$('pNet').textContent='📴 Offline'});
+$('pLoc').onclick=function(){$('pLoc').textContent='📍 Checking…';getLoc(function(){})};
+renderC();renderH();getLoc(function(){});
+</script>
+</body>
+</html>
