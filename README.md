@@ -29,24 +29,6 @@ The application provides an emergency assistance interface with location trackin
 * Local Storage
 * Google Maps Integration
 
-## 📸 Application Screenshots
-
-### 1. Main Dashboard
-
-![Home Dashboard](screenshots/home.png)
-
-### 2. Emergency Contacts
-
-![Emergency Contacts](screenshots/emergency-contacts.png)
-
-### 3. Live GPS Radar
-
-![Live Map](screenshots/live-map.png)
-
-### 4. Alert History
-
-![Alert History](screenshots/alert-history.png)
-
 ## ⚙️ Installation and Setup
 
 1. Clone this repository:
