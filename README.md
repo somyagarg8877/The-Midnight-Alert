@@ -1,5 +1,5 @@
 # 🚨 The Midnight Alert
-
+**Live Project Link** : https://somyagarg8877.github.io/The-Midnight-Alert/ 
 ### Emergency SOS & Personal Safety Web Application
 
 The Midnight Alert is a web-based personal safety application designed to provide quick access to emergency assistance through an interactive SOS interface.
